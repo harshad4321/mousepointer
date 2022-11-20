@@ -8,6 +8,8 @@ var app = require('../app');
 var debug = require('debug')('mousepointer-node.js:server');
 var http = require('http');
 
+
+
 /**
  * Get port from environment and store in Express.
  */
@@ -24,11 +26,39 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
+
+/**
+ * Create  socket.io .
+ */
+
+const { Server } = require("socket.io");
+const io = new Server(server);
+
+
+/**
+ * Finding Socket.io is connected or not .
+ */
+
+
+io.on('connection', (socket) => {
+  console.log('a user connected'.green);
+  socket.on('disconnect', () => {
+    console.log('user disconnected'.red);
+  });
+})
+
+
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
+
+
+server.listen(port, () => {
+  console.log('Server is started on 127.0.0.1:'.red + ' http://localhost:8081/'.rainbow)
+});
+
+
 server.on('error', onError);
 server.on('listening', onListening);
 

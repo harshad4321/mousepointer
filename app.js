@@ -3,43 +3,44 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var colours = require('colours')
+var colour = require('colours')
+var fs = require('fs');
 
-var http = require('http');
+require('dotenv').config()
 
-require('dotenv').config();
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-// const { Server } = require('https');
+var http = require("http");
+var { Server } = require("socket.io");
 
 var app = express();
 
 
-/**
- * Create  socket.io .
- */
 
-var server = http.createServer(app);
-var { Server } = require("socket.io");
+var indexRouter = require('./routes/index');
+var usersRouter = require('./routes/users');
+
+
+// Create the http server
+const server = require('http').createServer(app);
+
+
+// the top of http server
 var io = new Server(server);
 
 
 
-const registerOrderHandlers = require("./routes/index");
-const registerUserHandlers = require("./routes/users");
 
-const onConnection = (socket) => {
-  registerOrderHandlers(io, socket);
-  registerUserHandlers(io, socket);
-}
+io.on("connection", (socket) => {
+  console.log('a user connected'.green);
+  socket.on("new-user", (data) => {
+    // console.log(data);
+    socket.broadcast.emit("new-user", data)
 
-
-
-
-io.on("connection", onConnection)
+  })
+})
 
 
+// app.set('socketio', io);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -53,16 +54,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-// app.set(server)
-// app.set(express.Server)
-// app.set('socketio');
-
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-
-
-
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -80,4 +73,4 @@ app.use(function (err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+module.exports = { app: app, server: server };

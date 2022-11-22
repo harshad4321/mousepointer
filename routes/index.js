@@ -1,23 +1,30 @@
 var express = require('express');
+const { server } = require('../app');
 var router = express.Router();
-var server = require('../bin/www');
+
 // 
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
-    res.render('index')
+  res.render('index')
+
+
+
 
 });
 
-// io.on('connection', (socket) => {
+// module.exports = (socket, res) => {
+//   // var on = socket.get('io');
+//   socket.on("connection", () => {
+//     console.log('a user connected'.green);
+//     // require('./routes/index')(io, socket)
+//     socket.on("new-user", (data) => {
+//       console.log(data);
+//     })
+//   })
 
-// })
+//   return router;
+// }
 
 
-
-module.exports = (io, socket) => {
-
-}
-
-
-module.exports = router;
+module.exports = router

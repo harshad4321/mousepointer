@@ -5,18 +5,23 @@
     <button>Add User</button>
 </div>
 
+<div class="container"></div>
 
 <script src="/socket.io/socket.io.js"></script>
-<script>
-    var socket = io();
-
+<script>var socket = io();
+    const container = document.querySelector(".container")
     const input = document.querySelector("input");
     const button = document.querySelector("button");
     button.addEventListener("click", () => {
+
         socket.emit("new-user", input.value)
         input.value = "";
     })
-
+    socket.on("new-user", (data) => {
+        const div = document.createElement("div")
+        div.textContent = data;
+        container.appendChild(div)
+    })
 
     socket.on("connect", () => {
         console.log('user is connected')

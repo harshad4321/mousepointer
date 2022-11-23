@@ -4,7 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var colour = require('colours')
-var fs = require('fs');
+
 
 require('dotenv').config()
 
@@ -28,16 +28,49 @@ const server = require('http').createServer(app);
 var io = new Server(server);
 
 
+// const User = {};
+
+// io.on("connection", (socket) => {
+//   console.log('a user connected'.green);
+//   console.log('connection', socket.id)
+//   socket.on("new-user", (data) => {
+//     console.log('>>>>>.', data);
+//     socket.broadcast.emit("new-user", data) //now it show me also;
 
 
+//   })
+//   socket.on("mousemoove", (coordinates) => {
+//     socket.broadcast.emit('mousemove', { coordinates, id: socket.id });
+//   })
+// })
+
+
+
+const user = {};
 io.on("connection", (socket) => {
-  console.log('a user connected'.green);
-  socket.on("new-user", (data) => {
-    // console.log(data);
-    socket.broadcast.emit("new-user", data)
+  socket.emit("fetch-users", user);
 
-  })
-})
+  socket.on("new-user", (data) => {
+    const newUser = {
+      id: socket.id,
+      text: data.text,
+    };
+    user[socket.id] = newUser;
+
+    io.emit("new-user", newUser);
+  });
+
+  socket.on("mousemmove", (coordinates) => {
+    io.emit("mousemove", { coordinates, id: socket.id });
+  });
+
+  socket.on("disconnect", () => {
+    delete user[socket.id];
+    io.emit("user-left", { id: socket.id });
+  });
+});
+
+
 
 
 // app.set('socketio', io);

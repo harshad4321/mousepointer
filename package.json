@@ -6,6 +6,7 @@
     "start": "nodemon ./bin/www"
   },
   "dependencies": {
+    "canvas": "^2.10.2",
     "colours": "^0.6.0-2",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",

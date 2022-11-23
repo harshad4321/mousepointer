@@ -1,4 +1,8 @@
+
+
 import { createParentContainer, createMousePointer, createUsername } from "./utility.js";
+
+
 
 const socket = io();
 const input = document.querySelector("input");
@@ -41,12 +45,15 @@ socket.on("connect", () => {
 socket.on("new-user", (newUser) => {
     if (userList[newUser.id]) return;
     userList[newUser.id] = newUser;
+
+
+
+
     const parentContainer = createParentContainer(newUser.id);
     const mousePointer = createMousePointer();
     const username = createUsername(newUser.text);
     parentContainer.appendChild(mousePointer);
     parentContainer.appendChild(username);
-
     document.body.appendChild(parentContainer);
 });
 
@@ -70,6 +77,7 @@ document.addEventListener("mousemove", (event) => {
     }
 });
 
+// for mobile touch move 
 
 document.addEventListener("touchmove", (event) => {
     if (currentPlayer) {

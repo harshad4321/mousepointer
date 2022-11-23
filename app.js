@@ -4,7 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var colour = require('colours')
-
+const { createCanvas } = require('canvas')
 
 require('dotenv').config()
 
@@ -26,23 +26,6 @@ const server = require('http').createServer(app);
 
 // the top of http server
 var io = new Server(server);
-
-
-// const User = {};
-
-// io.on("connection", (socket) => {
-//   console.log('a user connected'.green);
-//   console.log('connection', socket.id)
-//   socket.on("new-user", (data) => {
-//     console.log('>>>>>.', data);
-//     socket.broadcast.emit("new-user", data) //now it show me also;
-
-
-//   })
-//   socket.on("mousemoove", (coordinates) => {
-//     socket.broadcast.emit('mousemove', { coordinates, id: socket.id });
-//   })
-// })
 
 
 
